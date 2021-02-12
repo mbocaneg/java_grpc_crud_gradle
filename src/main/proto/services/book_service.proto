@@ -1,0 +1,27 @@
+syntax = "proto3";
+
+import "models/author.proto";
+import "models/book.proto";
+import "services/service_params.proto";
+
+import "google/protobuf/empty.proto";
+
+package services;
+
+service BookService {
+
+  rpc CreateBook(models.Book) returns (models.Book);
+
+  rpc GetBook(BookRequestId) returns (models.Book);
+
+  rpc GetBookAuthor(BookRequestId) returns (models.Author);
+
+  rpc GetAllBooks(google.protobuf.Empty) returns (stream models.Book);
+
+  rpc GetAllBooksByAuthor(AuthorRequestId) returns (stream models.Book);
+
+  rpc UpdateBook(BookUpdateParams) returns (models.Book);
+
+  rpc DeleteBook(BookRequestId) returns (google.protobuf.Empty);
+
+}

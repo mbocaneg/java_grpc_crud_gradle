@@ -1,0 +1,21 @@
+syntax = "proto3";
+
+import "models/author.proto";
+import "google/protobuf/empty.proto";
+import "services/service_params.proto";
+
+package services;
+
+service AuthorService {
+
+  rpc CreateAuthor(models.Author) returns (models.Author);
+
+  rpc GetAuthor(AuthorRequestId) returns (models.Author);
+
+  rpc GetAllAuthors(google.protobuf.Empty) returns (stream models.Author);
+
+  rpc UpdateAuthor(AuthorUpdateParams) returns (models.Author);
+
+  rpc DeleteAuthor(AuthorRequestId) returns (google.protobuf.Empty);
+
+}

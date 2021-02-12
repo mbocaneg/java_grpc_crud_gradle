@@ -1,0 +1,14 @@
+syntax = "proto3";
+
+import "models/author.proto";
+
+package models;
+
+message Book {
+  int32 id = 1;
+  string name = 2;
+  repeated Author authors = 3;
+  int32 year_published = 4;
+  string publisher = 5;
+  float price = 6;
+}
