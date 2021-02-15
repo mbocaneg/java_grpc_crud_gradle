@@ -12,6 +12,7 @@ public class BookstoreServer {
         server = ServerBuilder
                 .forPort(1234)
                 .addService(new AuthorServiceImpl())
+                .addService(new BookServiceImpl())
                 .build()
                 .start();
 
