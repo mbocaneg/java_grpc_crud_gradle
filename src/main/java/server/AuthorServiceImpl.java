@@ -37,7 +37,10 @@ public class AuthorServiceImpl extends AuthorServiceGrpc.AuthorServiceImplBase {
 
     @Override
     public void updateAuthor(ServiceParams.AuthorUpdateParams request, StreamObserver<AuthorOuterClass.Author> responseObserver) {
-        super.updateAuthor(request, responseObserver);
+        AuthorOuterClass.Author authorToUpdate = request.getAuthorToUpdate();
+        AuthorOuterClass.Author updatedAuthor = repo.updateAuthor(authorToUpdate);
+        responseObserver.onNext(updatedAuthor);
+        responseObserver.onCompleted();
     }
 
     @Override

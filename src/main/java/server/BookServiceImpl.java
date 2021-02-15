@@ -37,10 +37,17 @@ public class BookServiceImpl extends BookServiceGrpc.BookServiceImplBase {
             responseObserver.onCompleted();
         }
         List<AuthorOuterClass.Author> authors = book.getAuthorsList();
-        for(AuthorOuterClass.Author author: authors) {
-            responseObserver.onNext(author);
+        if(authors == null) {
+            responseObserver.onNext(null);
+            responseObserver.onCompleted();
+            return;
         }
-        responseObserver.onCompleted();
+        else {
+            for(AuthorOuterClass.Author author: authors) {
+                responseObserver.onNext(author);
+            }
+            responseObserver.onCompleted();
+        }
     }
 
     @Override
@@ -53,16 +60,26 @@ public class BookServiceImpl extends BookServiceGrpc.BookServiceImplBase {
 
     @Override
     public void getAllBooksByAuthor(ServiceParams.AuthorRequestId request, StreamObserver<BookOuterClass.Book> responseObserver) {
-        super.getAllBooksByAuthor(request, responseObserver);
+        int id = request.getId();
+        List<BookOuterClass.Book> booksByAuthor = repo.getBookByAuthor(id);
+        for(BookOuterClass.Book book: booksByAuthor) {
+            responseObserver.onNext(book);
+        }
+        responseObserver.onCompleted();
     }
 
     @Override
     public void updateBook(ServiceParams.BookUpdateParams request, StreamObserver<BookOuterClass.Book> responseObserver) {
-        super.updateBook(request, responseObserver);
+        BookOuterClass.Book bookToUpdate = request.getBookToUpdate();
+        BookOuterClass.Book updatedBook = repo.UpdateBook(bookToUpdate);
+        responseObserver.onNext(updatedBook);
+        responseObserver.onCompleted();
     }
 
     @Override
     public void deleteBook(ServiceParams.BookRequestId request, StreamObserver<Empty> responseObserver) {
-        super.deleteBook(request, responseObserver);
+        repo.deleteBook(request.getId());
+        responseObserver.onNext(Empty.newBuilder().build());
+        responseObserver.onCompleted();
     }
 }
